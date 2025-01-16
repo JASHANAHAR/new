@@ -74,13 +74,14 @@
 
    
     <!-- Country Selection -->
+     {% load countries %}
     <label for="country" class="lables">Country (Choose Your Country)</label>
-    {% load countries %}
-    {% get_countries as countries %}
     <select name="country" id="country" class="type">
+        <option value="">Select Country</option>
+        {% get_countries as countries %}
         {% for country in countries %}
             <option value="{{ country.name }}"
-                {% if country.name == request.POST.country %} selected {% endif %}>
+                {% if country.name == request.POST.country %}selected{% endif %}>
                 {{ country.name }}
             </option>
         {% endfor %}
