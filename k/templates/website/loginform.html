@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'common.js' %}" defer></script>    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> 
+</head>
+<body>
+
+    <h1>Login Form</h1>
+
+    <form id="form" class="form_wrap" action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+
+        <!-- Username Field -->
+        <label for="user_name" class="lables">User Name</label>
+        <input type="text" name="user_name" class="type" id="user_name" placeholder="Enter Your Username" value="{{ request.POST.user_name|default:"" }}">
+        {% if name_error %}
+            <p class="error">{{ name_error }}</p>
+        {% endif %}
+
+        <!-- Password Field -->
+        <label for="password" class="lables">Password</label>
+        <div class="password-input-wrapper">
+            <input type="password" name="password" class="type" id="password" placeholder="Enter Your Password">
+            <span class="password-toggle" onclick="togglePassword('password')">
+                <i class="fas fa-eye"></i>
+            </span>
+        </div>
+        {% if password_error %}
+            <p class="error">{{ password_error }}</p>
+        {% endif %}
+
+        
+
+        <!-- Submit Button -->
+        <input type="submit" class="type1" value="Login">
+
+        <!-- Error and Success Messages -->
+        {% if success %}
+            <p class="success">{{ success }}</p>
+        {% endif %}
+        {% if all_field_error %}
+            <p class="error" id="error">{{ all_field_error }}</p>
+        {% endif %}
+        {% if error %}
+            <p class="error" id="error">{{ error }}</p>
+        {% endif %}
+
+        <!-- Registration Link -->
+        <p id="para">You don't have an account? <a href="{% url 'registation' %}">Create one here</a></p>
+    </form>
+
+    <button id="sidebarToggle" class="toggle-button"><i class="fas fa-bars"></i></button>
+
+    <div class="sidebar" id="sidebar">
+        <h2>Navigation</h2>
+        <ul>
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'registation' %}">Register</a></li>
+            <li><a href="{% url 'login' %}">View Data</a></li>
+            <div class="user-stats">
+                <li><a href="#"><h2>USER DATA</h2></a></li>
+                <li ><h3>Total User in Table</h3></li>
+                <li><p>{{ user_data|length }}</p> </li>
+            </div>
+        </ul>
+        <div class="sidebar-footer">
+            <p>&copy; 2024 User Management System</p>
+        </div>
+    </div>
+
+</body>
+</html>

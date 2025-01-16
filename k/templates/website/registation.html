@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'common.js' %}" defer></script>    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+<h1>Registration Form</h1>
+
+<form id="form" class="form_wrap" action="{% url 'registation' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Full Name -->
+    <label for="name" class="lables">Full Name</label>
+    <input type="text" name="name" class="type" id="name" placeholder="Enter Your Name"
+           value="{{ request.POST.name|default_if_none:'' }}">
+    {% if name_error %}
+        <p class="error">{{ name_error }}</p>
+    {% endif %}
+
+    <!-- Username -->
+    <label for="user_name" class="lables">User Name</label>
+    <input type="text" name="user_name" class="type" id="user_name" placeholder="Enter Your Username"
+           value="{{ request.POST.user_name|default_if_none:'' }}">
+    {% if user_name_error %}
+        <p class="error">{{ user_name_error }}</p>
+    {% endif %}
+    {% if user_error %}
+        <p class="error">{{ user_error }}</p>
+    {% endif %}
+
+    <!-- Email -->
+    <label for="email" class="lables">E-Mail</label>
+    <input type="email" name="email" class="type" id="email" placeholder="Enter Your E-Mail"
+           value="{{ request.POST.email|default_if_none:'' }}">
+    {% if mail_error %}
+        <p class="error">{{ mail_error }}</p>
+    {% endif %}
+    {% if email_already_taken_error %}
+        <p class="error">{{ email_already_taken_error }}</p>
+    {% endif %}
+
+    <!-- Gender Selection -->
+    <div class="input_wrap" >
+        <label class="lables">Gender (Choose Your Gender)</label>
+        <ul>
+            <li>
+                <label class="radio_wrap">
+                    <input type="radio" name="gender" value="male" class="input_radio"
+                           {% if request.POST.gender == 'male' %}checked{% endif %}>
+                    <span>Male</span>
+                </label>
+            </li>
+            <li>
+                <label class="radio_wrap">
+                    <input type="radio" name="gender" value="female" class="input_radio"
+                           {% if request.POST.gender == 'female' %}checked{% endif %}>
+                    <span>Female</span>
+                    
+                </label>
+            </li>
+        </ul>
+    </div><br>
+    {% if gender_error %}
+         <p class="error">{{ gender_error }}</p>
+    {% endif %}
+
+
+   
+    <!-- Country Selection -->
+    <label for="country" class="lables">Country (Choose Your Country)</label>
+    {% load countries %}
+    {% get_countries as countries %}
+    <select name="country" id="country" class="type">
+        {% for country in countries %}
+            <option value="{{ country.name }}"
+                {% if country.name == request.POST.country %} selected {% endif %}>
+                {{ country.name }}
+            </option>
+        {% endfor %}
+    </select>
+    {% if country_error %}
+        <p class="error">{{ country_error }}</p>
+    {% endif %}
+
+    <!-- Password -->
+    <div class="password-field">
+        <label for="password" class="lables">Password</label>
+        <div class="password-input-wrapper">
+            <input type="password" name="password" class="type" id="password" placeholder="Enter Your Password" value="{{ request.POST.password|default_if_none:'' }}">
+            <span class="password-toggle" onclick="togglePassword('password')">
+                <i class="fas fa-eye"></i>
+            </span>
+        </div>
+        {% if password_error %}
+            <p class="error">{{ password_error }}</p>
+        {% endif %}
+    </div>
+    <label for="strengthBar" class="lables">Password Strength</label>
+    <progress id="strengthBar" max="6" value={{password_strength}}>password strength</progress>
+
+    
+
+    <!-- Confirm Password -->
+    <label for="confirm_password" class="lables">Confirm Password</label>
+    {% comment %} <input type="password" name="confirm_password" class="type" id="confirm_password" placeholder="Confirm Your Password" value="{{ request.POST.confirm_password|default_if_none:'' }}"> {% endcomment %}
+    <div class="password-input-wrapper">
+        <input type="password" name="confirm_password" class="type" id="confirm_password" placeholder="Confirm Your Password" value="{{ request.POST.confirm_password|default_if_none:'' }}">
+        <span class="password-toggle" onclick="togglePassword('confirm_password')">
+            <i class="fas fa-eye"></i>
+        </span>
+    </div>
+    {% if confirm_password_error %}
+        <p class="error">{{ confirm_password_error }}</p>
+    {% endif %}
+
+    <!-- Image Upload -->
+    <label for="image" class="lables" >Upload Your Photo</label>
+    <input type="file" name="image" class="type" id="image" accept="image/*" onchange="previewImage(event)" value="{{ request.POST.image|default_if_none:'' }}">
+    <img id="imagePreview" style="display:none; width:150px; height:auto; margin-bottom:25px;  border-radius:10px; box-shadow:0 0 5px rgba(0,0,0,0.2);" {% if request.POST.image %}src="{{ request.POST.image }}"{% endif %} >
+    {% if image_error %}
+        <p class="error">{{ image_error }}</p>
+    {% endif %}
+
+
+
+
+    <!-- Terms and Conditions -->
+    <input type="checkbox" name="checkbox" id="checkbox" {% if request.POST.checkbox %}checked{% endif %}>
+    <label for="checkbox" id="label3">You agree with our Terms and Conditions</label><br>
+    {% if checkbox_error %}
+        <p class="error" id="check_error">{{ checkbox_error }}</p>
+    {% endif %}
+
+  
+
+    <!-- Submit Button -->
+    <input type="submit" id="type1" value="Register"><br><br><br>
+
+      <!-- Error Messages and Success Confirmation -->
+      {% if all_error %}
+      <p class="error">{{ all_error }}</p><br>
+  {% endif %}<br>
+  {% if success %}
+      <p class="success">{{ success }}</p><br>
+  {% endif %}
+
+  {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+    <!-- Login Link -->
+    <p class="para">Already have an account? <a class="login" href="{% url 'login' %}">Login</a></p>
+
+</form>
+
+<button id="sidebarToggle" class="toggle-button"><i class="fas fa-bars"></i></button>
+
+<div class="sidebar" id="sidebar">
+    <h2>Navigation</h2>
+    <ul>
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'registation' %}">Register</a></li>
+        <li><a href="{% url 'login' %}">View Data</a></li>
+    </ul>
+    <div class="sidebar-footer">
+        <p>&copy; 2024 User Management System</p>
+    </div>
+</div>
+
+
+
+</body>
+</html>

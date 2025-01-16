@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'common.js' %}" defer></script> 
+</head>
+<body>
+
+    <h1>Edit Your Details</h1>
+    
+    <form id="form" class="form_wrap" action="{% url 'edit' user.id %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Full Name -->
+        <label for="name" class="lables">Full Name</label>
+        <input type="text" name="user_name" class="type" id="name" placeholder="Enter Your Name"
+               value="{{ request.POST.user_name|default:user.user_name }}">
+        {% if errors.name_edit_error %}
+            <p class="error">{{ errors.name_edit_error }}</p>
+        {% endif %}
+        
+        <!-- Email -->
+        <label for="email" class="lables">E-Mail</label>
+        <input type="email" name="email" class="type" id="email" placeholder="Enter Your E-Mail"
+               value="{{ request.POST.email|default:user.email }}">
+        {% if errors.mail_edit_error %}
+            <p class="error">{{ errors.mail_edit_error }}</p>
+        {% endif %}
+
+        <!-- Password -->
+        <label for="password" class="lables">Password</label>
+        <input type="password" name="password" class="type" id="password" placeholder="Enter New Password">
+        {% if errors.password_edit_error %}
+            <p class="error">{{ errors.password_edit_error }}</p>
+        {% endif %}
+        
+        <!-- Confirm Password -->
+        <label for="confirm_password" class="lables">Confirm Password</label>
+        <input type="password" name="confirm_password" class="type" id="confirm_password" placeholder="Confirm Your Password">
+        {% if errors.confirm_password_edit_error %}
+            <p class="error">{{ errors.confirm_password_edit_error }}</p>
+        {% endif %}
+
+        <!-- Image Upload -->
+        <label for="image" class="lables">Upload Your Photo</label>
+        <input type="file" name="image" class="type" id="image" accept="image/*" onchange="previewImage(event)">
+        
+        <!-- Existing Image or Hidden Placeholder -->
+        <img id="imagePreview" 
+             src="{{ user.image.url }}" 
+             style="{{ user.image|default_if_none:'display:none' }}; width:150px; height:auto; margin-bottom:25px; border-radius:10px; box-shadow:0 0 5px rgba(0,0,0,0.2);">
+
+        {% if errors.image_edit_error %}
+            <p class="error">{{ errors.image_edit_error }}</p>
+        {% endif %}
+        
+        <script>
+            // Function to Preview Image
+            function previewImage(event) {
+                const image = document.getElementById('imagePreview');
+                image.src = URL.createObjectURL(event.target.files[0]);
+                image.style.display = 'block';
+            }
+        </script>
+
+        <!-- Submit Button -->
+        <input type="submit" name="edit" id="type1" value="Save">
+
+        <!-- Global Error Message -->
+        {% if errors.error %}
+            <p class="error">{{ errors.error }}</p>
+        {% endif %}
+    </form>
+
+
+    <button id="sidebarToggle" class="toggle-button"><i class="fas fa-bars"></i></button>
+
+    <div class="sidebar">
+        <h2>Navigation</h2>
+        <ul>
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'registation' %}">Register</a></li>
+            <li><a href="#" class="active">View Users</a></li>
+        </ul>
+        <div class="user-stats">
+            <h3>User Statistics</h3>
+            <p>Total Users: {{ user_data|length }}</p>
+        </div>
+        <div class="sidebar-footer">
+            <p>&copy; 2024 User Management System</p>
+        </div>
+    </div>
+    
+</body>
+</html>

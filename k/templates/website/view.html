@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data Table</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="{% static 'common.js' %}" defer></script> 
+</head>
+<body id="view">
+
+<h1>User Data Table</h1>
+
+<table border='1' class="user-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>User Name</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Country</th>
+            <th>Password</th>
+            <th>Image</th>
+            <th>Edit/Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in user_data %}
+        <tr>
+            <td>{{ i.name }}</td>
+            <td>{{ i.user_name }}</td>
+            <td>{{ i.email }}</td>
+            <td>{{ i.gender }}</td>
+            <td>{{ i.country }}</td>
+            <td>{{ i.password }}</td>
+            <td>
+                {% if i.image %}
+                <img src="{{ i.image.url }}" alt="User Image">
+                {% else %}
+                No Image Available
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'delete' i.id %}" onclick="return confirm('Are you sure you want to delete this user?');">
+                    <button class="action-btn delete-btn">Delete</button>
+                </a>
+                <a href="{% url 'edit' i.id %}">
+                    <button class="action-btn edit-btn">Edit</button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<button id="sidebarToggle" class="toggle-button"><i class="fas fa-bars"></i></button>
+
+<div class="sidebar" id="sidebar">
+    <h2>Navigation</h2>
+    <ul>
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'registation' %}">Register</a></li>
+        <li><a href="{% url 'login' %}">View Data</a></li>
+    <div class="user-stats">
+        <li><a href="#"><h2>USER DATA</h2></a></li>
+        <li ><h3>Total User in Table</h3></li>
+        <li><p>{{ user_data|length }}</p> </li>
+    </div>
+    </ul>
+    <div class="sidebar-footer">
+        <p>&copy; 2024 User Management System</p>
+    </div>
+</div>
+
+
+
+
+</body>
+</html>

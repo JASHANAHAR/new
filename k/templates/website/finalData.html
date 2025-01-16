@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Successful</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+    <div class="success-container">
+        <h1 class="success-heading">Registration Successful!</h1>
+        <p class="success-message">
+            Your account has been created successfully.
+            <br> Click the button below to log in to your account.
+        </p>
+        <a class="success-link" href="{% url 'login' %}">Login Here</a>
+    </div>
+
+</body>
+</html>
