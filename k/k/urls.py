@@ -31,7 +31,11 @@ urlpatterns = [
     path('edit/<int:id>/', views.edit, name='edit'),
     path('login',views.login, name='login'),
     path('finaldata',views.finaldata, name='finaldata'),
+    path('get_countries',views.get_countries, name='get_countries'),    
+
+
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

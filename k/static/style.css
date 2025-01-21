@@ -83,7 +83,10 @@ form {
     box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.1);
 
 }
-
+#password_strength_error{
+    background-color: #00ff00;
+ 
+}
 .success {
     color: green;
     font-size: 1em;

@@ -1,20 +1,36 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from .models import UserData
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
-from django.urls import reverse
-from django.contrib.auth.password_validation import password_validators_help_texts
-
+import requests         
+from django.conf import settings
+from django.core.cache import cache
 from django.shortcuts import render
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from myApp.models import UserData
+import json
 
+UNIVERSAL_API_KEY = settings.UNIVERSAL_API_KEY
+UNIVERSAL_USER_EMAIL = settings.UNIVERSAL_USER_EMAIL
+
+
+def get_countries(request):
+        url = "https://api.first.org/data/v1/countries"
+        countriesRequestApi = requests.get(url)
+        country_data = json.loads(countriesRequestApi.content)['data']
+        countries = [{'name': country["country"]} for country in country_data.values()]
+        return countries
+
+       
 def registation(request):
+    print("Registation view called")
+    countries = get_countries(request)  # Fetch countries
+    states = [] 
+
     
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -22,11 +38,13 @@ def registation(request):
         email = request.POST.get("email")
         gender = request.POST.get('gender')
         country = request.POST.get('country')
+        state = request.POST.get('state')
         password = request.POST.get("password")
         password_strength = calculate_password_strength(password)
         confirm_password = request.POST.get("confirm_password")
         image = request.FILES.get("image")
         checkbox = request.POST.get('checkbox')
+
 
         # Collect errors in a dictionary
         errors = {}
@@ -41,7 +59,7 @@ def registation(request):
             errors['mail_error'] = 'Please fill E-mail.'
         if not gender:
             errors['gender_error'] = 'Please Choose Your Gender.'
-        if not country:
+        if country == 'Select Country':
             errors['country_error'] = 'Please select a country.'
         if not password:
             errors['password_error'] = 'Please fill Password.'
@@ -67,10 +85,10 @@ def registation(request):
 
         # Return form with errors if any exist
         if errors:
-            return render(request, 'website/registation.html', {**errors, 'password_strength': password_strength})
+            return render(request, 'website/registation.html', {**errors, 'password_strength': password_strength, 'countries': countries, 'states': states})
 
         # Save user data if no errors
-        user_data = UserData(name=name, user_name=user_name, email=email, gender=gender,country=country,password=make_password(password), password_strength=password_strength,image=image)
+        user_data = UserData(name=name, user_name=user_name, email=email, gender=gender,country=country,state=state,password=make_password(password), password_strength=password_strength,image=image)
         user_data.save()
 
         
@@ -80,7 +98,11 @@ def registation(request):
         return redirect('registation')
    
 
-    return render(request, 'website/registation.html')
+    return render(request, 'website/registation.html', {'countries': countries, 'states': states})
+
+
+
+
 
 def calculate_password_strength(password):
     # Basic strength check (you can make it more complex)

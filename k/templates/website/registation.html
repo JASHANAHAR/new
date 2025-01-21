@@ -71,17 +71,11 @@
          <p class="error">{{ gender_error }}</p>
     {% endif %}
 
-
-   
-    <!-- Country Selection -->
-     {% load countries %}
-    <label for="country" class="lables">Country (Choose Your Country)</label>
+    <label for="country" class="lables">Country</label>
     <select name="country" id="country" class="type">
-        <option value="">Select Country</option>
-        {% get_countries as countries %}
+        <option value="Select Country">Select Country</option>
         {% for country in countries %}
-            <option value="{{ country.name }}"
-                {% if country.name == request.POST.country %}selected{% endif %}>
+            <option value="{{ country.name }}" {% if country.name == request.POST.country %}selected{% endif %}>
                 {{ country.name }}
             </option>
         {% endfor %}
@@ -105,6 +99,10 @@
     </div>
     <label for="strengthBar" class="lables">Password Strength</label>
     <progress id="strengthBar" max="6" value={{password_strength}}>password strength</progress>
+    {% if password_strength_error %}
+        <p class="error" id="password_strength_error">{{ password_strength_error }}</p>
+    {% endif %}
+ 
 
     
 
@@ -164,7 +162,6 @@
     <p class="para">Already have an account? <a class="login" href="{% url 'login' %}">Login</a></p>
 
 </form>
-
 <button id="sidebarToggle" class="toggle-button"><i class="fas fa-bars"></i></button>
 
 <div class="sidebar" id="sidebar">

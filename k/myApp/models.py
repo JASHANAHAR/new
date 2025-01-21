@@ -10,14 +10,13 @@ class UserData(models.Model):
     user_name = models.CharField(max_length=100)
     email = models.EmailField()
     gender = models.CharField(max_length=10)
-    country = CountryField()  # Using CountryField
+    country = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     password_strength = models.IntegerField(default=0)
     image = models.ImageField(upload_to='images/')
 
     def __str__(self):
         return self.name
-
 
 # class home(models.Model):
 #     home_name = models.CharField(max_length=50) 

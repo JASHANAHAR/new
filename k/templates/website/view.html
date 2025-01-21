@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Data Table</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'common.js' %}" defer></script>    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script src="{% static 'common.js' %}" defer></script> 
 </head>
 <body id="view">
 
@@ -55,6 +55,7 @@
     </tbody>
 </table>
 
+
 <button id="sidebarToggle" class="toggle-button"><i class="fas fa-bars"></i></button>
 
 <div class="sidebar" id="sidebar">
@@ -63,18 +64,16 @@
         <li><a href="{% url 'login' %}">Login</a></li>
         <li><a href="{% url 'registation' %}">Register</a></li>
         <li><a href="{% url 'login' %}">View Data</a></li>
-    <div class="user-stats">
-        <li><a href="#"><h2>USER DATA</h2></a></li>
-        <li ><h3>Total User in Table</h3></li>
-        <li><p>{{ user_data|length }}</p> </li>
-    </div>
+        <div class="user-stats">
+            <li><a href="#"><h2>USER DATA</h2></a></li>
+            <li ><h3>Total User in Table</h3></li>
+            <li><p>{{ user_data|length }}</p> </li>
+        </div>
     </ul>
     <div class="sidebar-footer">
         <p>&copy; 2024 User Management System</p>
     </div>
 </div>
-
-
 
 
 </body>

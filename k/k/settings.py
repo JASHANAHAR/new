@@ -14,6 +14,9 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+UNIVERSAL_API_KEY = 'x_P272a-cEsC7bIDmbdjOOhh5G3zqRMzqP0gKf9g3CTXMKpqKQW57EukJ59xJyaaqe0'
+UNIVERSAL_USER_EMAIL = 'naharjashan13@gmail.com'
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -66,7 +69,7 @@ ROOT_URLCONF = 'k.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,14 +131,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_DIR= os.path.join(BASE_DIR,'static')
-STATICFILES_DIRS=[STATIC_DIR,]
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "static",  # assuming a 'static' folder at the project root
+    os.path.join(BASE_DIR, 'static')
 ]
-STATIC_ROOT = BASE_DIR / "staticfiles"
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -144,3 +144,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
