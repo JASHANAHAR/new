@@ -373,10 +373,10 @@ h1 {
     box-shadow: 2px 0 5px rgba(0,0,0,0.5);
 
 }
-.sidebar.show {
-    left: 0;
-    background-color: #333;
+.sidebar.active {
+    left: 0; /* Show sidebar when active */
 }
+
 .toggle-button {
     position: fixed;
     left: 10px;

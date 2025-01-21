@@ -29,7 +29,7 @@ def get_countries(request):
 def registation(request):
     print("Registation view called")
     countries = get_countries(request)  # Fetch countries
-    states = [] 
+
 
     
     if request.method == 'POST':
@@ -38,7 +38,7 @@ def registation(request):
         email = request.POST.get("email")
         gender = request.POST.get('gender')
         country = request.POST.get('country')
-        state = request.POST.get('state')
+   
         password = request.POST.get("password")
         password_strength = calculate_password_strength(password)
         confirm_password = request.POST.get("confirm_password")
@@ -85,10 +85,10 @@ def registation(request):
 
         # Return form with errors if any exist
         if errors:
-            return render(request, 'website/registation.html', {**errors, 'password_strength': password_strength, 'countries': countries, 'states': states})
+            return render(request, 'website/registation.html', {**errors, 'password_strength': password_strength, 'countries': countries})
 
         # Save user data if no errors
-        user_data = UserData(name=name, user_name=user_name, email=email, gender=gender,country=country,state=state,password=make_password(password), password_strength=password_strength,image=image)
+        user_data = UserData(name=name, user_name=user_name, email=email, gender=gender,country=country,password=make_password(password), password_strength=password_strength,image=image)
         user_data.save()
 
         
@@ -98,7 +98,7 @@ def registation(request):
         return redirect('registation')
    
 
-    return render(request, 'website/registation.html', {'countries': countries, 'states': states})
+    return render(request, 'website/registation.html', {'countries': countries})
 
 
 
@@ -223,16 +223,17 @@ def finaldata(request):
 def login(request):
     user_data = UserData.objects.all()
     if request.method == 'POST':
-        user_name = request.POST.get("user_name")
+        user_name_email = request.POST.get("user_name")
         password = request.POST.get("password")
 
-        if not user_name or not password:
+        if not user_name_email or not password:
             return render(request, 'website/loginform.html', {
                 'error': 'Please fill all fields.', 
             })
 
         try:
-            user = UserData.objects.get(user_name=user_name)
+            user = UserData.objects.filter(user_name=user_name_email).first() or\
+                UserData.objects.filter(email=user_name_email).first()
             if check_password(password, user.password):
                 request.session['user_id'] = user.id
                 return redirect('view')

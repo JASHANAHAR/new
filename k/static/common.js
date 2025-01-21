@@ -38,16 +38,19 @@ function togglePassword(inputId) {
         toggleIcon.classList.add('fa-eye');
     }
     }
-document.addEventListener("DOMContentLoaded", function () {
-        const sidebar = document.getElementById("sidebar");
-        const toggleButton = document.getElementById("sidebarToggle");
+document.addEventListener('DOMContentLoaded', function() {
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
     
-        if (sidebar && toggleButton) {
-            toggleButton.addEventListener("click", function () {
-                sidebar.classList.toggle("show");
-            });
-        } else {
-            console.error("Sidebar or toggle button not found.");
-        }
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+        });
+    
+        // Optional: Close sidebar when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
 });
     

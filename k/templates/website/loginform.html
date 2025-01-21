@@ -17,7 +17,7 @@
         {% csrf_token %}
 
         <!-- Username Field -->
-        <label for="user_name" class="lables">User Name</label>
+        <label for="user_name" class="lables">User Name or Email</label>
         <input type="text" name="user_name" class="type" id="user_name" placeholder="Enter Your Username" value="{{ request.POST.user_name|default:"" }}">
         {% if name_error %}
             <p class="error">{{ name_error }}</p>
